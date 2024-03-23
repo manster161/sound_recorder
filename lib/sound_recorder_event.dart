@@ -8,6 +8,8 @@ sealed class SoundRecorderEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SoundRecorderToggleEvent extends SoundRecorderEvent {}
+
 class SoundRecorderStart extends SoundRecorderEvent {}
 
 class SoundRecorderStop extends SoundRecorderEvent {}
