@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_recorder/sound_recorder_page.dart';
 import 'package:sound_recorder/sound_recorder_bloc.dart';
+import 'package:logger/logger.dart';
+
+
+
 void main() {
   runApp(const MyApp());
+
+  void main() {
+   Logger.level = Level.debug;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -33,8 +41,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BlocProvider(create: (_) => SoundRecoderBloc() 
-      , child: SoundRecorderPage()) 
+      home: BlocProvider(create: (_) => SoundRecorderBloc() 
+      , child:  SoundRecorderPage()) 
     );
   }
 }
