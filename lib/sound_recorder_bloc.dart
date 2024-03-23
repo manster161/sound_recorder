@@ -16,41 +16,42 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   NoiseMeter? noiseMeter;
 
   bool isRecording = false;
-  double currentDbLevel = 0.0;
-  double peakDbLevel = 0.0;
-
+ 
   Future<bool> checkPermission() async => await Permission.microphone.isGranted;
   Future<void> requestPermission() async =>
       await Permission.microphone.request();
 
-  void onButtonPressed() {
-    add(SoundRecorderStart());
-    _logger.i('onButtonPressed');
-  }
-
   void onData(NoiseReading event) {
-    _latestReading = event;
-    currentDbLevel = event.meanDecibel;
-    peakDbLevel = event.maxDecibel;
+     _logger.d('On data called. Mean: ${event.meanDecibel}');
+    if(_latestReading == null){
+      add(SoundRecorderDbLevelChange(event.meanDecibel));
+      add(SoundRecorderPeakLevelChange(event.maxDecibel));
+    }
+    else{
+      if(event.meanDecibel != _latestReading!.meanDecibel){
+        add(SoundRecorderDbLevelChange(event.meanDecibel));
+      }
+      if(event.maxDecibel < _latestReading!.maxDecibel){
+        _logger.i('Peak level changed');
+        add(SoundRecorderPeakLevelChange(event.maxDecibel));
+      }
+    }
 
-    Logger().i(' Noise Level: $currentDbLevel');
-    add(SoundRecorderDbLevelChanged(currentDbLevel));
-    add(SoundRecorderPeakLevelChanged(peakDbLevel));
+    _latestReading = event;
   }
 
- 
   void startRecording() async {
     Logger().i('Recorder Start');
     
     if (await checkPermission()) {
-        Logger().i('Permission check done');
-        noiseMeter ??= NoiseMeter();
-        _noiseSubscription = noiseMeter?.noise.listen((event) => onData(event));
         isRecording = true;
-      } else {
+        noiseMeter ??= NoiseMeter();
+        _noiseSubscription = noiseMeter?.noise.listen(onData, onError: onError);
+      } else 
+      {
        Logger().i('Requesting permission');
-      await requestPermission();
-    }
+       await requestPermission();
+      }
   }
 
   void stopRecording() {
@@ -63,18 +64,34 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   Stream<SoundRecorderState> mapEventToState(
     SoundRecorderEvent event,
   ) async* {
-    if (event is SoundRecorderStart) {
+    if (event is SoundRecorderStart) 
+    {
       startRecording();
       yield SoundRecorderRecording();
-    } else if (event is SoundRecorderStop) {
-            stopRecording();
+    } 
+    else if (event is SoundRecorderStop) 
+    {
+      stopRecording();
       yield SoundRecorderStopped();
-    } else if (event is SoundRecorderToggleEvent) {
-      if (isRecording) {
+    } 
+    else if (event is SoundRecorderToggleEvent) 
+    {
+      if (isRecording) 
+      {
         add(SoundRecorderStop());
-      } else {
+      } 
+      else 
+      {
         add(SoundRecorderStart());
       }
+    } 
+    else if (event is SoundRecorderDbLevelChange) 
+    {
+      yield SoundRecorderDbLevelChanged(event.currentDbLevel);
+    } 
+    else if (event is SoundRecorderPeakLevelChange) 
+    {
+      yield SoundRecorderPeakLevelChanged(event.peakDbLevel);
     }
   }
 }

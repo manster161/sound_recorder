@@ -16,16 +16,33 @@ sealed class SoundRecorderState extends Equatable {
 
 class SoundRecorderInitial extends SoundRecorderState {
   @override
-  String get recordButtonText => 'Record';
+  String get recordButtonText => 'Intial';
 }
 
 class SoundRecorderRecording extends SoundRecorderState {
   @override
   String get recordButtonText => 'Stop';
-  
 }
 
 class SoundRecorderStopped extends SoundRecorderState {
   @override
   String get recordButtonText => 'Record';
+}
+
+class SoundRecorderDbLevelChanged extends SoundRecorderState {
+  final double _currentDbLevel;
+
+  SoundRecorderDbLevelChanged(double val) : _currentDbLevel = val;
+
+  @override
+  double get currentDbLevel => _currentDbLevel;
+}
+
+class SoundRecorderPeakLevelChanged extends SoundRecorderState {
+  final double _peakDbLevel;
+
+  SoundRecorderPeakLevelChanged(double val) : _peakDbLevel = val;
+
+  @override
+  double get peakDbLevel => _peakDbLevel;
 }

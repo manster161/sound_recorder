@@ -18,23 +18,23 @@ class SoundRecorderStart extends SoundRecorderEvent {}
 class SoundRecorderStop extends SoundRecorderEvent {}
 
 
-class SoundRecorderDbLevelChanged extends SoundRecorderEvent {
+class SoundRecorderDbLevelChange extends SoundRecorderEvent {
   
   @override
   double _currentDbLevel = 0.0;
 
-  SoundRecorderDbLevelChanged(double currentDbLevel) {
+  SoundRecorderDbLevelChange(double currentDbLevel) {
     _currentDbLevel = currentDbLevel;
   }
 
   double get currentDbLevel => _currentDbLevel;
 }
 
-class SoundRecorderPeakLevelChanged extends SoundRecorderEvent {
+class SoundRecorderPeakLevelChange extends SoundRecorderEvent {
    
    @override
   double _peakDbLevel = 0.0;
-  SoundRecorderPeakLevelChanged(double peakDbLevel) {
+  SoundRecorderPeakLevelChange(double peakDbLevel) {
    _peakDbLevel = peakDbLevel;
   }
 
