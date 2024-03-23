@@ -22,11 +22,22 @@ class SoundRecorderPage extends StatelessWidget {
       ),
       body: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
         builder: (context, state) => Center(
-          child: Text(
-            'Sound Recorder',
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Center(child: Text('Current dB level: ${state.currentDbLevelString}')),
+                ],
+              ),
+              Row(
+                children: [
+                  Center(child: Text('Peak db level: ${state.peakDbLevelString}')),
+                ],
+              ),
+            ],
           ),
         ),
-      ),
+        ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,

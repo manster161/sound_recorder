@@ -9,12 +9,13 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final Logger _logger = Logger();
 
   bool isRecording = false;
+  double currentDbLevel = 0.0;
+  double peakDbLevel = 0.0;
 
   void onButtonPressed() {
     add(SoundRecorderStart());
     _logger.i('onButtonPressed');
   }
-
 
 
   @override
