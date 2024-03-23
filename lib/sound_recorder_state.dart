@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:equatable/equatable.dart';
 
 sealed class SoundRecorderState extends Equatable {
-  const SoundRecorderState();
+   SoundRecorderState();
 
   @override
   List<Object> get props => [];
@@ -11,16 +11,9 @@ sealed class SoundRecorderState extends Equatable {
   double _currentDbLevel = 0.0;
   double _peakDbLevel = 0.0;
 
-  String get recordButtonText => 'recordnull';
+  String get recordButtonText => 'Record';
   double get currentDbLevel => _currentDbLevel;
-  String get currentDbLevelString => currentDbLevel.toString();
   double get peakDbLevel => _peakDbLevel;
-  String get peakDbLevelString => peakDbLevel.toString();
-
-  void SetCurrentDbLevel(double value) {
-    _currentDbLevel = value;
-  }
-  
 }
 
 
@@ -38,4 +31,17 @@ class SoundRecorderRecording extends SoundRecorderState {
 class SoundRecorderStopped extends SoundRecorderState {
   @override
   String get recordButtonText => 'Record';
+}
+
+
+class SoundRecorderDbLevelChanged extends SoundRecorderState {
+  SoundRecorderDbLevelChanged(double currentDbLevel) {
+    _currentDbLevel = currentDbLevel;
+  }
+}
+
+class SoundRecorderPeakLevelChanged extends SoundRecorderState {
+  SoundRecorderPeakLevelChanged(double peakDbLevel) {
+   _peakDbLevel = peakDbLevel;
+  }
 }

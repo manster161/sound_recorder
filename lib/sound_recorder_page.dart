@@ -26,12 +26,12 @@ class SoundRecorderPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Center(child: Text('Current dB level: ${state.currentDbLevelString}')),
+                  Center(child: Text('Current dB level: ${state.currentDbLevel.toString()}')),
                 ],
               ),
               Row(
                 children: [
-                  Center(child: Text('Peak db level: ${state.peakDbLevelString}')),
+                  Center(child: Text('Peak db level: ${state.peakDbLevel.toString()}')),
                 ],
               ),
             ],
