@@ -4,9 +4,8 @@ import 'package:logger/logger.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class SoundRepository {
+class SoundRepository  {
   late final Logger logger;
-
   NoiseReading? _latestReading;
   StreamSubscription<NoiseReading>? _noiseSubscription;
   NoiseMeter? noiseMeter;
@@ -17,15 +16,18 @@ class SoundRepository {
 
   SoundRepository(this.logger);
 
-  Future<bool> checkPermission() async =>
-      await Permission.microphone.isGranted;
+  Future<bool> checkPermission() async => await Permission.microphone.isGranted;
 
   Future<void> requestPermission() async =>
       await Permission.microphone.request();
 
-
   Future startRecording() async {
     logger.i('Recorder Start');
+
+    if (isRecording) {
+      logger.i('Already started');
+      return;
+    }
 
     if (await checkPermission()) {
       isRecording = true;
@@ -35,18 +37,23 @@ class SoundRepository {
       logger.i('Requesting permission');
       await requestPermission();
     }
-  }    
-
+  }
 
   void stopRecording() {
     logger.i('Recorder Stop');
+
+    if (!isRecording) {
+      logger.i('Already stopped');
+      return;
+    }
+
     isRecording = false;
     _noiseSubscription?.cancel();
     _noiseSubscription = null;
     noiseMeter = null;
   }
 
-void reset() {
+  void reset() {
     _latestReading = null;
     onNewMaxDbLevel!(0.0);
   }
@@ -56,7 +63,6 @@ void reset() {
   }
 
   void onData(NoiseReading event) {
-    logger.d('On data called. Mean: ${event.meanDecibel}');
     if (_latestReading == null) {
       onNewMeanDbLevel!(event.meanDecibel);
       onNewMaxDbLevel!(event.maxDecibel);
@@ -69,6 +75,8 @@ void reset() {
         onNewMaxDbLevel!(event.maxDecibel);
       }
     }
+
     _latestReading = event;
   }
+
 }

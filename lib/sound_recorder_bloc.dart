@@ -11,7 +11,10 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final SoundRepository soundRepository;
 
   SoundRecorderBloc(this.soundRepository, this.logger)
-      : super(SoundRecorderInitiated());
+      : super(SoundRecorderInitiated()){
+        soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
+        soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
+      }
 
   SoundRecorderState get initialState => SoundRecorderInitiated();
 
@@ -21,14 +24,16 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
     soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
   }
 
-  void startRecording() async {
-    logger.i('Recorder Start');
-    soundRepository.startRecording();
+  Future startRecording() async {
+    await soundRepository.startRecording();
   }
 
   void stopRecording() {
-    logger.i('Recorder Stop');
     soundRepository.stopRecording();
+  }
+
+  bool isRecording() {
+    return soundRepository.isRecording;
   }
 
   void onNewMaxDbLevel(double val) {
@@ -49,7 +54,7 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
       init(onNewMaxDbLevel, onNewMeanDbLevel);
       yield SoundRecorderInitiated();
     } else if (event is SoundRecorderStartEvent) {
-      startRecording();
+      await startRecording();
       yield SoundRecorderRecording();
     } else if (event is SoundRecorderStopEvent) {
       stopRecording();

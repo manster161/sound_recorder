@@ -29,7 +29,7 @@ class SoundRecorderStopped extends SoundRecorderState {
 class SoundRecorderDbLevelChanged extends SoundRecorderState {
   final double _currentDbLevel;
 
-  const SoundRecorderDbLevelChanged(double val) : _currentDbLevel = val;
+  const SoundRecorderDbLevelChanged(this._currentDbLevel);
 
   @override
   double get currentDbLevel => _currentDbLevel;
@@ -38,7 +38,7 @@ class SoundRecorderDbLevelChanged extends SoundRecorderState {
 class SoundRecorderPeakLevelChanged extends SoundRecorderState {
   final double _peakDbLevel;
 
-  const SoundRecorderPeakLevelChanged(double val) : _peakDbLevel = val;
+  const SoundRecorderPeakLevelChanged(this._peakDbLevel);
 
   @override
   double get peakDbLevel => _peakDbLevel;

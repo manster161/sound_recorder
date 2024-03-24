@@ -17,12 +17,12 @@ void main() {
   setUp(() {
     soundRepository = MockSoundRepository();
 
-    when(() => soundRepository.startRecording()).thenAnswer((_) {});
+    when(() => soundRepository.startRecording()).thenAnswer((_) async {});
     when(() => soundRepository.stopRecording()).thenAnswer((_) {});
+    when(() => soundRepository.isRecording).thenAnswer((_) { return true;});
 
     logger = Logger();
   });
-
 
  blocTest('Emits [SoundRecorderInitated] when created',
       build: () {

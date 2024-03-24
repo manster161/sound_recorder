@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 sealed class SoundRecorderEvent extends Equatable {
@@ -6,19 +5,15 @@ sealed class SoundRecorderEvent extends Equatable {
 
   @override
   List<Object> get props => [];
-
- // double get _currentDbLevel => 0.0;
-  
-//double get _peakDbLevel => 0.0;
 }
 
 class SoundRecorderInitialEvent extends SoundRecorderEvent {}
+
 class SoundRecorderToggleEvent extends SoundRecorderEvent {}
 
 class SoundRecorderStartEvent extends SoundRecorderEvent {}
 
 class SoundRecorderStopEvent extends SoundRecorderEvent {}
-
 
 class SoundRecorderDbLevelChange extends SoundRecorderEvent {
   late final double _currentDbLevel;
@@ -31,12 +26,10 @@ class SoundRecorderDbLevelChange extends SoundRecorderEvent {
 }
 
 class SoundRecorderPeakLevelChange extends SoundRecorderEvent {
-   
   late final double _peakDbLevel;
   SoundRecorderPeakLevelChange(double peakDbLevel) {
-   _peakDbLevel = peakDbLevel;
+    _peakDbLevel = peakDbLevel;
   }
 
   double get peakDbLevel => _peakDbLevel;
 }
-
