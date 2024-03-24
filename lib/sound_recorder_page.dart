@@ -5,7 +5,7 @@ import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:logger/logger.dart';
 class SoundRecorderPage extends StatelessWidget {
-   SoundRecorderPage({Key? key}) : super(key: key);
+   SoundRecorderPage({super.key});
 
   final Logger _logger = Logger(level: Level.info);
 
@@ -18,7 +18,7 @@ class SoundRecorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sound Recorder'),
+        title: const Text('Sound Recorder'),
       ),
       body: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
         builder: (context, state) => Center(

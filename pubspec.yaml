@@ -40,7 +40,7 @@ dependencies:
   logger: ^2.1.0
   noise_meter: ^5.0.2
   permission_handler: ^9.1.0
- 
+  bloc: ^7.0.0
 
 
 dev_dependencies:
@@ -48,6 +48,7 @@ dev_dependencies:
     sdk: flutter
   bloc_test: ^8.0.0
   mockito: ^5.0.0
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

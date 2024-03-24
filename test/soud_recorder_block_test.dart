@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sound_recorder/sound_repository.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sound_recorder/sound_recorder_bloc.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
@@ -16,6 +15,10 @@ void main() {
 
   setUp(() {
     soundRepository = MockSoundRepository();
+
+    when(() => soundRepository.startRecording()).thenAnswer((_) {});
+    when(() => soundRepository.stopRecording()).thenAnswer((_) {});
+
     logger = Logger();
   });
 
@@ -24,9 +27,11 @@ void main() {
     expect(bloc.state, SoundRecorderInitial());  
   });
 
-  test('When starting the recording it emits, intial and recording', () {
+  test('When starting the recording it emits, initial and recording', () {
     final bloc = SoundRecorderBloc(soundRepository, logger);
     bloc.add(SoundRecorderStart());
+
+    verify(() => soundRepository.startRecording()).called(1);
 
     emitsInOrder(
       [

@@ -9,10 +9,6 @@ import 'package:sound_recorder/sound_repository.dart';
 
 void main() {
   runApp(const MyApp());
-
-  void main() {
-   Logger.level = Level.debug;
-  }
 }
 
 class MyApp extends StatelessWidget {

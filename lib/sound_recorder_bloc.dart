@@ -2,8 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:logger/logger.dart';
-import 'package:noise_meter/noise_meter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 
 import 'package:sound_recorder/sound_repository.dart';
@@ -19,18 +17,15 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
         soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
       }
       
-  @override
+  
   SoundRecorderState get initialState => SoundRecorderInitial();
 
-  NoiseReading? _latestReading;
-  StreamSubscription<NoiseReading>? _noiseSubscription;
-  NoiseMeter? noiseMeter;
 
   bool isRecording = false;
 
   void startRecording() async {
     Logger().i('Recorder Start');
-    await soundRepository.startRecording();
+    soundRepository.startRecording();
   }
 
   void stopRecording() {
