@@ -24,64 +24,24 @@ void main() {
   });
 
 
+ blocTest('Emits [SoundRecorderInitated] when created',
+      build: () {
+        return SoundRecorderBloc(soundRepository, logger);
+      },
+      act: (bloc) => bloc.add(SoundRecorderInitialEvent()),
+      expect: () => <SoundRecorderState>[SoundRecorderInitiated()]);
 
+  blocTest('Emits [SoundRecorderRecording] when successful start',
+      build: () {
+        return SoundRecorderBloc(soundRepository, logger);
+      },
+      act: (bloc) => bloc.add(SoundRecorderStartEvent()),
+      expect: () => <SoundRecorderState>[SoundRecorderRecording()]);
 
-blocTest('Emits [SoundRecorderRecording] when successful start', 
-build: () {
-  return SoundRecorderBloc(soundRepository, logger);
-},
-act: (bloc) => bloc.add(SoundRecorderInitialEvent()),
-expect: () => <SoundRecorderState>[
-  SoundRecorderRecording()
-]); 
-
-blocTest('Emits [SoundRecorderRecording] when successful start', 
-build: () {
-  return SoundRecorderBloc(soundRepository, logger);
-},
-act: (bloc) => bloc.add(SoundRecorderStartEvent()),
-expect: () => <SoundRecorderState>[
-  SoundRecorderRecording()
-]); 
-
-blocTest('Emits [SoundRecorderStopped] when successful stop', 
-build: () {
-  return SoundRecorderBloc(soundRepository, logger);
-},
-act: (bloc) => bloc.add(SoundRecorderStopEvent()),
-expect: () => <SoundRecorderState>[
-  SoundRecorderStopped()
-]); 
-
-
-
-  test('Initial state is SoundRecorderInitial', () {
-    final bloc = SoundRecorderBloc(soundRepository, logger);
-    expect(bloc.state, SoundRecorderInitialEvent());  
-  });
-
-  test('When starting the recording it emits, initial and recording', () {
-    final bloc = SoundRecorderBloc(soundRepository, logger);
-    bloc.add(SoundRecorderStartEvent());
-    emitsInOrder(
-      [
-        SoundRecorderInitialEvent(),
-        SoundRecorderRecording()
-      ],
-    );
-  });
-
-  test('When starting and stopping [SoundRecorderInitial, SoundRecorderRecording, SoundRecorderStopped]', () {
-    final bloc = SoundRecorderBloc(soundRepository, logger);
-    bloc.add(SoundRecorderStartEvent());
-    bloc.add(SoundRecorderStopEvent());
-
-    emitsInOrder(
-      [
-        SoundRecorderInitialEvent(),
-        SoundRecorderRecording(),
-        SoundRecorderStopped()
-      ],
-    );
-  });
+  blocTest('Emits [SoundRecorderStopped] when successful stop',
+      build: () {
+        return SoundRecorderBloc(soundRepository, logger);
+      },
+      act: (bloc) => bloc.add(SoundRecorderStopEvent()),
+      expect: () => <SoundRecorderState>[SoundRecorderStopped()]);
 }
