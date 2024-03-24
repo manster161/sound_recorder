@@ -13,8 +13,12 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final SoundRepository soundRepository;
 
   SoundRecorderBloc(this.soundRepository, this.logger)
-      : super(SoundRecorderInitial());
-
+      : super(SoundRecorderInitial())
+      {
+        soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
+        soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
+      }
+      
   @override
   SoundRecorderState get initialState => SoundRecorderInitial();
 
@@ -24,45 +28,21 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
 
   bool isRecording = false;
 
-  Future<bool> checkPermission() async => await Permission.microphone.isGranted;
-  Future<void> requestPermission() async =>
-      await Permission.microphone.request();
-
-  void onData(NoiseReading event) {
-    logger.d('On data called. Mean: ${event.meanDecibel}');
-    if (_latestReading == null) {
-      add(SoundRecorderDbLevelChange(event.meanDecibel));
-      add(SoundRecorderPeakLevelChange(event.maxDecibel));
-    } else {
-      if (event.meanDecibel != _latestReading!.meanDecibel) {
-        add(SoundRecorderDbLevelChange(event.meanDecibel));
-      }
-      if (event.maxDecibel < _latestReading!.maxDecibel) {
-        logger.i('Peak level changed');
-        add(SoundRecorderPeakLevelChange(event.maxDecibel));
-      }
-    }
-
-    _latestReading = event;
-  }
-
   void startRecording() async {
     Logger().i('Recorder Start');
-
-    if (await checkPermission()) {
-      isRecording = true;
-      noiseMeter ??= NoiseMeter();
-      _noiseSubscription = noiseMeter?.noise.listen(onData, onError: onError);
-    } else {
-      Logger().i('Requesting permission');
-      await requestPermission();
-    }
+    await soundRepository.startRecording();
   }
 
   void stopRecording() {
-    _noiseSubscription?.cancel();
-    isRecording = false;
     logger.i('Recorder Stop');
+    soundRepository.stopRecording();
+  }
+
+  void onNewMaxDbLevel(double val) {
+    add(SoundRecorderPeakLevelChange(val));
+  }
+void onNewMeanDbLevel(double val) {
+    add(SoundRecorderDbLevelChange(val));
   }
 
   @override
