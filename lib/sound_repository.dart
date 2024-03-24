@@ -24,7 +24,7 @@ class SoundRepository {
       await Permission.microphone.request();
 
 
-  void startRecording() async {
+  Future startRecording() async {
     logger.i('Recorder Start');
 
     if (await checkPermission()) {
