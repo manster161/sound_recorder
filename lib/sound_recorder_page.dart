@@ -4,11 +4,11 @@ import 'package:sound_recorder/sound_recorder_bloc.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:logger/logger.dart';
+
 class SoundRecorderPage extends StatelessWidget {
-   SoundRecorderPage({super.key});
+  SoundRecorderPage({super.key});
 
   final Logger _logger = Logger(level: Level.info);
-
 
   void onPressed() {
     _logger.i('Setting pressed');
@@ -26,34 +26,36 @@ class SoundRecorderPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Center(child: Text('Current dB level: ${state.currentDbLevel.toString()}')),
+                  Center(
+                      child: Text(
+                          'Current dB level: ${state.currentDbLevel.toString()}')),
                 ],
               ),
               Row(
                 children: [
-                  Center(child: Text('Peak db level: ${state.peakDbLevel.toString()}')),
+                  Center(
+                      child: Text(
+                          'Peak db level: ${state.peakDbLevel.toString()}')),
                 ],
               ),
             ],
           ),
         ),
-        ),
+      ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(builder: (context, state) => Text(state.recordButtonText)),
-            onPressed: () =>  BlocProvider.of<SoundRecorderBloc>(context).add(SoundRecorderToggleEvent())
-          ),
+              child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
+                  builder: (context, state) => Text(state.recordButtonText)),
+              onPressed: () => BlocProvider.of<SoundRecorderBloc>(context)
+                  .add(SoundRecorderToggleEvent())),
           const SizedBox(height: 4),
           FloatingActionButton(
-            child: const Text('Settings'),
-            onPressed: () => onPressed()
-          ),
+              child: const Text('Settings'), onPressed: () => onPressed()),
         ],
       ),
-    
-    ); 
+    );
   }
 }

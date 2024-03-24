@@ -12,21 +12,20 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final SoundRepository soundRepository;
 
   SoundRecorderBloc(this.soundRepository, this.logger)
-      : super(SoundRecorderInitiated()){
-        soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
-        soundRepository.onNewMeanDbLevel =  onNewMaxDbLevel;
-      }
-      
+      : super(SoundRecorderInitiated()) {
+    soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
+    soundRepository.onNewMeanDbLevel = onNewMaxDbLevel;
+  }
 
   SoundRecorderState get initialState => SoundRecorderInitiated();
 
-
-void onNewMaxDbLevel(NoiseReading reading) {
+  void onNewMaxDbLevel(NoiseReading reading) {
     add(SoundRecorderLevelChange(reading.meanDecibel, reading.maxDecibel));
   }
 
   void onNewMeanDbLevel(NoiseReading reading) {
-    add(SoundRecorderLevelChange(reading.meanDecibel, soundRepository.maxDbLevel));
+    add(SoundRecorderLevelChange(
+        reading.meanDecibel, soundRepository.maxDbLevel));
   }
 
   void init(Function onNewMaxDbLevel, Function onNewMeanDbLevel) {
@@ -46,7 +45,6 @@ void onNewMaxDbLevel(NoiseReading reading) {
   bool isRecording() {
     return soundRepository.isRecording;
   }
-
 
   @override
   Stream<SoundRecorderState> mapEventToState(
@@ -69,7 +67,6 @@ void onNewMaxDbLevel(NoiseReading reading) {
       }
     } else if (event is SoundRecorderLevelChange) {
       yield SoundRecorderLevelChanged(event.meanDbLevel, event.peakDbLevel);
-    } 
+    }
   }
 }
-

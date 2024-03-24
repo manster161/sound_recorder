@@ -24,7 +24,6 @@ class SoundRecorderLevelChange extends SoundRecorderEvent {
     _peakDecibel = peakDecibel;
   }
 
-
   double get meanDbLevel => _meanDecibel;
   double get peakDbLevel => _peakDecibel;
 }

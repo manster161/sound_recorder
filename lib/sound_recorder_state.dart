@@ -38,7 +38,6 @@ class SoundRecorderLevelChanged extends SoundRecorderState {
   double get peakDbLevel => _peakDbLevel;
 }
 
-
 class SoundRecorderPeakDbLevelChanged extends SoundRecorderState {
   final double _peakDbLevel;
 
