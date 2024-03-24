@@ -11,7 +11,7 @@ sealed class SoundRecorderState extends Equatable {
   double get peakDbLevel => 0.0;
 }
 
-class SoundRecorderInitial extends SoundRecorderState {
+class SoundRecorderInitiated extends SoundRecorderState {
   @override
   String get recordButtonText => 'Initial';
 }

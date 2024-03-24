@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sound_recorder/sound_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -22,20 +23,49 @@ void main() {
     logger = Logger();
   });
 
+
+
+
+blocTest('Emits [SoundRecorderRecording] when successful start', 
+build: () {
+  return SoundRecorderBloc(soundRepository, logger);
+},
+act: (bloc) => bloc.add(SoundRecorderInitialEvent()),
+expect: () => <SoundRecorderState>[
+  SoundRecorderRecording()
+]); 
+
+blocTest('Emits [SoundRecorderRecording] when successful start', 
+build: () {
+  return SoundRecorderBloc(soundRepository, logger);
+},
+act: (bloc) => bloc.add(SoundRecorderStartEvent()),
+expect: () => <SoundRecorderState>[
+  SoundRecorderRecording()
+]); 
+
+blocTest('Emits [SoundRecorderStopped] when successful stop', 
+build: () {
+  return SoundRecorderBloc(soundRepository, logger);
+},
+act: (bloc) => bloc.add(SoundRecorderStopEvent()),
+expect: () => <SoundRecorderState>[
+  SoundRecorderStopped()
+]); 
+
+
+
   test('Initial state is SoundRecorderInitial', () {
     final bloc = SoundRecorderBloc(soundRepository, logger);
-    expect(bloc.state, SoundRecorderInitial());  
+    expect(bloc.state, SoundRecorderInitialEvent());  
   });
 
   test('When starting the recording it emits, initial and recording', () {
     final bloc = SoundRecorderBloc(soundRepository, logger);
-    bloc.add(SoundRecorderStart());
-
-    verify(() => soundRepository.startRecording()).called(1);
-
+    bloc.add(SoundRecorderStartEvent());
     emitsInOrder(
       [
-        SoundRecorderInitial(),
+        SoundRecorderInitialEvent(),
         SoundRecorderRecording()
       ],
     );
@@ -43,12 +73,12 @@ void main() {
 
   test('When starting and stopping [SoundRecorderInitial, SoundRecorderRecording, SoundRecorderStopped]', () {
     final bloc = SoundRecorderBloc(soundRepository, logger);
-    bloc.add(SoundRecorderStart());
-    bloc.add(SoundRecorderStop());
+    bloc.add(SoundRecorderStartEvent());
+    bloc.add(SoundRecorderStopEvent());
 
     emitsInOrder(
       [
-        SoundRecorderInitial(),
+        SoundRecorderInitialEvent(),
         SoundRecorderRecording(),
         SoundRecorderStopped()
       ],

@@ -12,11 +12,12 @@ sealed class SoundRecorderEvent extends Equatable {
 //double get _peakDbLevel => 0.0;
 }
 
+class SoundRecorderInitialEvent extends SoundRecorderEvent {}
 class SoundRecorderToggleEvent extends SoundRecorderEvent {}
 
-class SoundRecorderStart extends SoundRecorderEvent {}
+class SoundRecorderStartEvent extends SoundRecorderEvent {}
 
-class SoundRecorderStop extends SoundRecorderEvent {}
+class SoundRecorderStopEvent extends SoundRecorderEvent {}
 
 
 class SoundRecorderDbLevelChange extends SoundRecorderEvent {

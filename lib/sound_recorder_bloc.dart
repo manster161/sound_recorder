@@ -11,20 +11,22 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final SoundRepository soundRepository;
 
   SoundRecorderBloc(this.soundRepository, this.logger)
-      : super(SoundRecorderInitial())
-      {
-        soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
-        soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
-      }
-      
-  
-  SoundRecorderState get initialState => SoundRecorderInitial();
+      : super(SoundRecorderInitiated()) {
+    soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
+    soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
+  }
 
+  SoundRecorderState get initialState => SoundRecorderInitiated();
 
   bool isRecording = false;
 
+  void init() {
+    logger.i('Recorder Init');
+    soundRepository.reset();
+  }
+
   void startRecording() async {
-    Logger().i('Recorder Start');
+    logger.i('Recorder Start');
     soundRepository.startRecording();
   }
 
@@ -34,9 +36,12 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   }
 
   void onNewMaxDbLevel(double val) {
+    logger.i('Max db level: $val');
     add(SoundRecorderPeakLevelChange(val));
   }
-void onNewMeanDbLevel(double val) {
+
+  void onNewMeanDbLevel(double val) {
+    logger.i('Mean db level: $val');
     add(SoundRecorderDbLevelChange(val));
   }
 
@@ -44,17 +49,20 @@ void onNewMeanDbLevel(double val) {
   Stream<SoundRecorderState> mapEventToState(
     SoundRecorderEvent event,
   ) async* {
-    if (event is SoundRecorderStart) {
+    if (event is SoundRecorderInitialEvent) {
+      init();
+      yield SoundRecorderInitiated();
+    } else if (event is SoundRecorderStartEvent) {
       startRecording();
       yield SoundRecorderRecording();
-    } else if (event is SoundRecorderStop) {
+    } else if (event is SoundRecorderStopEvent) {
       stopRecording();
       yield SoundRecorderStopped();
     } else if (event is SoundRecorderToggleEvent) {
       if (isRecording) {
-        add(SoundRecorderStop());
+        add(SoundRecorderStopEvent());
       } else {
-        add(SoundRecorderStart());
+        add(SoundRecorderStartEvent());
       }
     } else if (event is SoundRecorderDbLevelChange) {
       yield SoundRecorderDbLevelChanged(event.currentDbLevel);
