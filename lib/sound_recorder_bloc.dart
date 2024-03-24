@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:noise_meter/noise_meter.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:logger/logger.dart';
@@ -13,10 +14,20 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   SoundRecorderBloc(this.soundRepository, this.logger)
       : super(SoundRecorderInitiated()){
         soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
-        soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
+        soundRepository.onNewMeanDbLevel =  onNewMaxDbLevel;
       }
+      
 
   SoundRecorderState get initialState => SoundRecorderInitiated();
+
+
+void onNewMaxDbLevel(NoiseReading reading) {
+    add(SoundRecorderLevelChange(reading.meanDecibel, reading.maxDecibel));
+  }
+
+  void onNewMeanDbLevel(NoiseReading reading) {
+    add(SoundRecorderLevelChange(reading.meanDecibel, soundRepository.maxDbLevel));
+  }
 
   void init(Function onNewMaxDbLevel, Function onNewMeanDbLevel) {
     logger.i('Recorder Init');
@@ -36,15 +47,6 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
     return soundRepository.isRecording;
   }
 
-  void onNewMaxDbLevel(double val) {
-    logger.i('Max db level: $val');
-    add(SoundRecorderPeakLevelChange(val));
-  }
-
-  void onNewMeanDbLevel(double val) {
-    logger.i('Mean db level: $val');
-    add(SoundRecorderDbLevelChange(val));
-  }
 
   @override
   Stream<SoundRecorderState> mapEventToState(
@@ -65,11 +67,9 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
       } else {
         add(SoundRecorderStartEvent());
       }
-    } else if (event is SoundRecorderDbLevelChange) {
-      yield SoundRecorderDbLevelChanged(event.currentDbLevel);
-    } else if (event is SoundRecorderPeakLevelChange) {
-      yield SoundRecorderPeakLevelChanged(event.peakDbLevel);
-    }
+    } else if (event is SoundRecorderLevelChange) {
+      yield SoundRecorderLevelChanged(event.meanDbLevel, event.peakDbLevel);
+    } 
   }
 }
 

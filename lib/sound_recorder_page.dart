@@ -11,7 +11,7 @@ class SoundRecorderPage extends StatelessWidget {
 
 
   void onPressed() {
-    _logger.i('onPressed');
+    _logger.i('Setting pressed');
   }
 
   @override
@@ -26,12 +26,12 @@ class SoundRecorderPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Center(child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(builder: (context, state) => Text('Current dB level: ${state.currentDbLevel.toString()}'))),
+                  Center(child: Text('Current dB level: ${state.currentDbLevel.toString()}')),
                 ],
               ),
               Row(
                 children: [
-                  Center(child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(builder: (context, state) => Text('Peak db level: ${state.peakDbLevel.toString()}'))),
+                  Center(child: Text('Peak db level: ${state.peakDbLevel.toString()}')),
                 ],
               ),
             ],

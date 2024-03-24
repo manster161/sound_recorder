@@ -15,21 +15,16 @@ class SoundRecorderStartEvent extends SoundRecorderEvent {}
 
 class SoundRecorderStopEvent extends SoundRecorderEvent {}
 
-class SoundRecorderDbLevelChange extends SoundRecorderEvent {
-  late final double _currentDbLevel;
+class SoundRecorderLevelChange extends SoundRecorderEvent {
+  late final double _meanDecibel;
+  late final double _peakDecibel;
 
-  SoundRecorderDbLevelChange(double currentDbLevel) {
-    _currentDbLevel = currentDbLevel;
+  SoundRecorderLevelChange(double meanDecibel, double peakDecibel) {
+    _meanDecibel = meanDecibel;
+    _peakDecibel = peakDecibel;
   }
 
-  double get currentDbLevel => _currentDbLevel;
-}
 
-class SoundRecorderPeakLevelChange extends SoundRecorderEvent {
-  late final double _peakDbLevel;
-  SoundRecorderPeakLevelChange(double peakDbLevel) {
-    _peakDbLevel = peakDbLevel;
-  }
-
-  double get peakDbLevel => _peakDbLevel;
+  double get meanDbLevel => _meanDecibel;
+  double get peakDbLevel => _peakDecibel;
 }

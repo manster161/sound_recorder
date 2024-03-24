@@ -6,13 +6,17 @@ import 'package:permission_handler/permission_handler.dart';
 
 class SoundRepository  {
   late final Logger logger;
+  
+  NoiseReading? get latestReading => _latestReading;
+
   NoiseReading? _latestReading;
   StreamSubscription<NoiseReading>? _noiseSubscription;
   NoiseMeter? noiseMeter;
+  double maxDbLevel = 0.0;
 
   bool isRecording = false;
-  Function? onNewMaxDbLevel;
-  Function? onNewMeanDbLevel;
+  Function onNewMaxDbLevel = (double level) { return 0.0; };
+  Function onNewMeanDbLevel = (double level) { return 0.0;};
 
   SoundRepository(this.logger);
 
@@ -59,20 +63,22 @@ class SoundRepository  {
   }
 
   void onError(Object error) {
+    maxDbLevel = 0.0;
     logger.e('Error: $error');
   }
 
   void onData(NoiseReading event) {
     if (_latestReading == null) {
-      onNewMeanDbLevel!(event.meanDecibel);
-      onNewMaxDbLevel!(event.maxDecibel);
+      onNewMeanDbLevel(event.meanDecibel);
+      onNewMaxDbLevel(event.maxDecibel);
     } else {
       if (event.meanDecibel != _latestReading!.meanDecibel) {
-        onNewMeanDbLevel!(event.meanDecibel);
+        onNewMeanDbLevel(event.meanDecibel);
       }
-      if (event.maxDecibel < _latestReading!.maxDecibel) {
+      if (event.maxDecibel > maxDbLevel) {
+        maxDbLevel = event.maxDecibel;
         logger.i('Peak level changed');
-        onNewMaxDbLevel!(event.maxDecibel);
+        onNewMaxDbLevel(event.maxDecibel);
       }
     }
 

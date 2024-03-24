@@ -26,20 +26,23 @@ class SoundRecorderStopped extends SoundRecorderState {
   String get recordButtonText => 'Record';
 }
 
-class SoundRecorderDbLevelChanged extends SoundRecorderState {
+class SoundRecorderLevelChanged extends SoundRecorderState {
   final double _currentDbLevel;
+  final double _peakDbLevel;
 
-  const SoundRecorderDbLevelChanged(this._currentDbLevel);
+  const SoundRecorderLevelChanged(this._currentDbLevel, this._peakDbLevel);
 
   @override
   double get currentDbLevel => _currentDbLevel;
+  @override
+  double get peakDbLevel => _peakDbLevel;
 }
 
-class SoundRecorderPeakLevelChanged extends SoundRecorderState {
+
+class SoundRecorderPeakDbLevelChanged extends SoundRecorderState {
   final double _peakDbLevel;
 
-  const SoundRecorderPeakLevelChanged(this._peakDbLevel);
-
+  const SoundRecorderPeakDbLevelChanged(this._peakDbLevel);
   @override
   double get peakDbLevel => _peakDbLevel;
 }
