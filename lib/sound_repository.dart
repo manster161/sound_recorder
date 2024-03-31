@@ -68,20 +68,20 @@ class SoundRepository {
   }
 
   void onData(NoiseReading event) {
+    logger.i('Recorder Data: ${event.meanDecibel}');
     if (_latestReading == null) {
-      onNewMeanDbLevel(event);
-      onNewMaxDbLevel(event);
+      onNewMeanDbLevel(event.meanDecibel);
+      onNewMaxDbLevel(event.maxDecibel);
     } else {
       if (event.meanDecibel != _latestReading!.meanDecibel) {
-        onNewMeanDbLevel(event);
+        onNewMeanDbLevel(event.maxDecibel);
       }
       if (event.maxDecibel > maxDbLevel) {
         maxDbLevel = event.maxDecibel;
         logger.i('Peak level changed');
-        onNewMaxDbLevel(event);
+        onNewMaxDbLevel(maxDbLevel);
       }
     }
-
     _latestReading = event;
   }
 }

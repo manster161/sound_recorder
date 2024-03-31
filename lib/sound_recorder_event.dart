@@ -16,14 +16,19 @@ class SoundRecorderStartEvent extends SoundRecorderEvent {}
 class SoundRecorderStopEvent extends SoundRecorderEvent {}
 
 class SoundRecorderLevelChange extends SoundRecorderEvent {
-  late final double _meanDecibel;
-  late final double _peakDecibel;
+  final double dbLevel;
 
-  SoundRecorderLevelChange(double meanDecibel, double peakDecibel) {
-    _meanDecibel = meanDecibel;
-    _peakDecibel = peakDecibel;
-  }
+  const SoundRecorderLevelChange(this.dbLevel);
 
-  double get meanDbLevel => _meanDecibel;
-  double get peakDbLevel => _peakDecibel;
+   @override
+  List<Object> get props => [dbLevel];
+}
+
+class SoundRecorderMaxLevelChange extends SoundRecorderEvent {
+  final double maxDbLevel;
+
+  const SoundRecorderMaxLevelChange(this.maxDbLevel);
+
+   @override
+  List<Object> get props => [maxDbLevel];
 }

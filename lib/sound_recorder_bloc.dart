@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:noise_meter/noise_meter.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:logger/logger.dart';
@@ -19,13 +18,12 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
 
   SoundRecorderState get initialState => SoundRecorderInitiated();
 
-  void onNewMaxDbLevel(NoiseReading reading) {
-    add(SoundRecorderLevelChange(reading.meanDecibel, reading.maxDecibel));
+  void onNewMaxDbLevel(double max) {
+    add(SoundRecorderMaxLevelChange(max));
   }
 
-  void onNewMeanDbLevel(NoiseReading reading) {
-    add(SoundRecorderLevelChange(
-        reading.meanDecibel, soundRepository.maxDbLevel));
+  void onNewMeanDbLevel(double mean) {
+    add(SoundRecorderLevelChange(mean));
   }
 
   void init(Function onNewMaxDbLevel, Function onNewMeanDbLevel) {
@@ -66,7 +64,9 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
         add(SoundRecorderStartEvent());
       }
     } else if (event is SoundRecorderLevelChange) {
-      yield SoundRecorderLevelChanged(event.meanDbLevel, event.peakDbLevel);
+      yield SoundRecorderLevelChanged(event.dbLevel);
+    } else if (event is SoundRecorderMaxLevelChange) {
+      yield SoundRecorderPeakDbLevelChanged(event.maxDbLevel);
     }
   }
 }

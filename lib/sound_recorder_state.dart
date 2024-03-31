@@ -4,11 +4,11 @@ sealed class SoundRecorderState extends Equatable {
   const SoundRecorderState();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [recordButtonText, currentDbLevel, peakDbLevel];
 
   String get recordButtonText => 'Record';
-  double get currentDbLevel => 0.0;
-  double get peakDbLevel => 0.0;
+  final double currentDbLevel = 0.0;
+  final double peakDbLevel = 0.0;
 }
 
 class SoundRecorderInitiated extends SoundRecorderState {
@@ -27,21 +27,14 @@ class SoundRecorderStopped extends SoundRecorderState {
 }
 
 class SoundRecorderLevelChanged extends SoundRecorderState {
-  final double _currentDbLevel;
-  final double _peakDbLevel;
-
-  const SoundRecorderLevelChanged(this._currentDbLevel, this._peakDbLevel);
-
   @override
-  double get currentDbLevel => _currentDbLevel;
-  @override
-  double get peakDbLevel => _peakDbLevel;
+  final double currentDbLevel;
+
+  const SoundRecorderLevelChanged(this.currentDbLevel);
 }
 
 class SoundRecorderPeakDbLevelChanged extends SoundRecorderState {
-  final double _peakDbLevel;
-
-  const SoundRecorderPeakDbLevelChanged(this._peakDbLevel);
   @override
-  double get peakDbLevel => _peakDbLevel;
+  final double peakDbLevel;
+  const SoundRecorderPeakDbLevelChanged(this.peakDbLevel);
 }

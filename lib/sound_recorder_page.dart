@@ -27,7 +27,8 @@ class SoundRecorderPage extends StatelessWidget {
               Row(
                 children: [
                   Center(
-                      child: Text(
+                      child:
+                       Text(
                           'Current dB level: ${state.currentDbLevel.toString()}')),
                 ],
               ),
@@ -48,7 +49,8 @@ class SoundRecorderPage extends StatelessWidget {
         children: <Widget>[
           FloatingActionButton(
               child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
-                  builder: (context, state) => Text(state.recordButtonText)),
+                builder: (context, state) => Text(state.recordButtonText),
+              ),
               onPressed: () => BlocProvider.of<SoundRecorderBloc>(context)
                   .add(SoundRecorderToggleEvent())),
           const SizedBox(height: 4),
