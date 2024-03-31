@@ -1,34 +1,36 @@
 import 'package:equatable/equatable.dart';
 
 sealed class SoundRecorderEvent extends Equatable {
-  const SoundRecorderEvent();
+  const SoundRecorderEvent(this.dbLevel, this.peakDbLevel);
 
   @override
-  List<Object> get props => [];
-}
+  List<Object> get props => [dbLevel, peakDbLevel];
 
-class SoundRecorderInitialEvent extends SoundRecorderEvent {}
-
-class SoundRecorderToggleEvent extends SoundRecorderEvent {}
-
-class SoundRecorderStartEvent extends SoundRecorderEvent {}
-
-class SoundRecorderStopEvent extends SoundRecorderEvent {}
-
-class SoundRecorderLevelChange extends SoundRecorderEvent {
   final double dbLevel;
+  final double peakDbLevel;
 
-  const SoundRecorderLevelChange(this.dbLevel);
-
-   @override
-  List<Object> get props => [dbLevel];
 }
 
-class SoundRecorderMaxLevelChange extends SoundRecorderEvent {
-  final double maxDbLevel;
+class SoundRecorderInitialEvent extends SoundRecorderEvent {
+  const SoundRecorderInitialEvent(super.dbLevel, super.peakDbLevel);
+}
 
-  const SoundRecorderMaxLevelChange(this.maxDbLevel);
+class SoundRecorderToggleEvent extends SoundRecorderEvent {
+  const SoundRecorderToggleEvent(super.dbLevel, super.peakDbLevel);
+}
 
-   @override
-  List<Object> get props => [maxDbLevel];
+class SoundRecorderStartEvent extends SoundRecorderEvent {
+  const SoundRecorderStartEvent(super.dbLevel, super.peakDbLevel);
+}
+
+class SoundRecorderStopEvent extends SoundRecorderEvent {
+  const SoundRecorderStopEvent(super.dbLevel, super.peakDbLevel);
+}
+
+class SoundRecorderMeanLevelChange extends SoundRecorderEvent {
+  const SoundRecorderMeanLevelChange(super.dbLevel, super.peakDbLevel);
+}
+
+class SoundRecorderPeakLevelChange extends SoundRecorderEvent {
+  const SoundRecorderPeakLevelChange(super.dbLevel, super.peakDbLevel);
 }

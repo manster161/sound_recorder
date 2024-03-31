@@ -20,29 +20,32 @@ class SoundRecorderPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Sound Recorder'),
       ),
-      body: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
-        builder: (context, state) => Center(
+      body: Center(
           child: Column(
             children: [
               Row(
                 children: [
                   Center(
                       child:
-                       Text(
-                          'Current dB level: ${state.currentDbLevel.toString()}')),
+                      BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
+                          builder: (context, state)  => 
+                               Text('Mean db level: ${state.currentDbLevel.toString()}')
+                          )),
                 ],
               ),
               Row(
                 children: [
                   Center(
-                      child: Text(
-                          'Peak db level: ${state.peakDbLevel.toString()}')),
+                      child: 
+                      BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
+                          builder: (context, state) => 
+                              Text('Peak db level: ${state.peakDbLevel.toString()}')
+                          )),
                 ],
               ),
             ],
           ),
         ),
-      ),
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -52,7 +55,7 @@ class SoundRecorderPage extends StatelessWidget {
                 builder: (context, state) => Text(state.recordButtonText),
               ),
               onPressed: () => BlocProvider.of<SoundRecorderBloc>(context)
-                  .add(SoundRecorderToggleEvent())),
+                  .add(const SoundRecorderToggleEvent(0.0, 0.0))),
           const SizedBox(height: 4),
           FloatingActionButton(
               child: const Text('Settings'), onPressed: () => onPressed()),

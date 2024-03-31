@@ -59,13 +59,14 @@ class SoundRepository {
 
   void reset() {
     _latestReading = null;
-    onNewMaxDbLevel!(0.0);
+    onNewMaxDbLevel(0.0);
   }
 
   void onError(Object error) {
     maxDbLevel = 0.0;
     logger.e('Error: $error');
   }
+
 
   void onData(NoiseReading event) {
     logger.i('Recorder Data: ${event.meanDecibel}');
@@ -74,7 +75,7 @@ class SoundRepository {
       onNewMaxDbLevel(event.maxDecibel);
     } else {
       if (event.meanDecibel != _latestReading!.meanDecibel) {
-        onNewMeanDbLevel(event.maxDecibel);
+        onNewMeanDbLevel(event.meanDecibel);
       }
       if (event.maxDecibel > maxDbLevel) {
         maxDbLevel = event.maxDecibel;

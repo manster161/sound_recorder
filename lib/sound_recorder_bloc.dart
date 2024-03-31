@@ -11,19 +11,19 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   final SoundRepository soundRepository;
 
   SoundRecorderBloc(this.soundRepository, this.logger)
-      : super(SoundRecorderInitiated()) {
+      : super(const SoundRecorderInitiated(0.0, 0.0)) {
     soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
     soundRepository.onNewMeanDbLevel = onNewMaxDbLevel;
   }
 
-  SoundRecorderState get initialState => SoundRecorderInitiated();
+  SoundRecorderState get initialState => const SoundRecorderInitiated(0.0, 0.0);
 
   void onNewMaxDbLevel(double max) {
-    add(SoundRecorderMaxLevelChange(max));
+    add(SoundRecorderPeakLevelChange(soundRepository.latestReading?.meanDecibel ?? 0.0, max));
   }
 
   void onNewMeanDbLevel(double mean) {
-    add(SoundRecorderLevelChange(mean));
+    add(SoundRecorderMeanLevelChange(mean, soundRepository.maxDbLevel));
   }
 
   void init(Function onNewMaxDbLevel, Function onNewMeanDbLevel) {
@@ -50,23 +50,23 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   ) async* {
     if (event is SoundRecorderInitialEvent) {
       init(onNewMaxDbLevel, onNewMeanDbLevel);
-      yield SoundRecorderInitiated();
+      yield const SoundRecorderInitiated(0.0, 0.0);
     } else if (event is SoundRecorderStartEvent) {
       await startRecording();
-      yield SoundRecorderRecording();
+      yield SoundRecorderRecording(event.dbLevel, event.peakDbLevel);
     } else if (event is SoundRecorderStopEvent) {
       stopRecording();
-      yield SoundRecorderStopped();
+      yield SoundRecorderStopped(event.dbLevel, event.peakDbLevel);
     } else if (event is SoundRecorderToggleEvent) {
       if (soundRepository.isRecording) {
-        add(SoundRecorderStopEvent());
+        add(SoundRecorderStopEvent(event.dbLevel, event.peakDbLevel));
       } else {
-        add(SoundRecorderStartEvent());
+        add(SoundRecorderStartEvent(event.dbLevel, event.peakDbLevel));
       }
-    } else if (event is SoundRecorderLevelChange) {
-      yield SoundRecorderLevelChanged(event.dbLevel);
-    } else if (event is SoundRecorderMaxLevelChange) {
-      yield SoundRecorderPeakDbLevelChanged(event.maxDbLevel);
+    } else if (event is SoundRecorderMeanLevelChange) {
+      yield SoundRecorderLevelChanged(event.dbLevel, event.peakDbLevel);
+    } else if (event is SoundRecorderPeakLevelChange) {
+      yield SoundRecorderPeakDbLevelChanged(event.dbLevel, event.peakDbLevel);
     }
   }
 }
