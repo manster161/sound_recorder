@@ -28,20 +28,20 @@ void main() {
       build: () {
         return SoundRecorderBloc(soundRepository, logger);
       },
-      act: (bloc) => bloc.add(SoundRecorderInitialEvent()),
-      expect: () => <SoundRecorderState>[SoundRecorderInitiated()]);
+      act: (bloc) => bloc.add(const SoundRecorderInitialEvent(0.0,0.0)),
+      expect: () => <SoundRecorderState>[const SoundRecorderInitiated(0.0,0.0)]);
 
   blocTest('Emits [SoundRecorderRecording] when successful start',
       build: () {
         return SoundRecorderBloc(soundRepository, logger);
       },
-      act: (bloc) => bloc.add(SoundRecorderStartEvent()),
-      expect: () => <SoundRecorderState>[SoundRecorderRecording()]);
+      act: (bloc) => bloc.add(const SoundRecorderStartEvent(0.0, 0.0)) ,
+      expect: () => <SoundRecorderState>[const SoundRecorderRecording(0.0,0.0)]);
 
   blocTest('Emits [SoundRecorderStopped] when successful stop',
       build: () {
         return SoundRecorderBloc(soundRepository, logger);
       },
-      act: (bloc) => bloc.add(SoundRecorderStopEvent()),
-      expect: () => <SoundRecorderState>[SoundRecorderStopped()]);
+      act: (bloc) => bloc.add(const SoundRecorderStopEvent(0.0,0.0)),
+      expect: () => <SoundRecorderState>[const SoundRecorderStopped(0.0,0.0)]);
 }
