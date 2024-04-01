@@ -58,10 +58,6 @@ class SoundRepository {
     _latestReading = null;
   }
 
-  void reset() {
-    _latestReading = null;
-    onNewMaxDbLevel(0.0);
-  }
 
   void onError(Object error) {
     maxDbLevel = 0.0;
