@@ -13,7 +13,7 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
   SoundRecorderBloc(this.soundRepository, this.logger)
       : super(const SoundRecorderInitiated(0.0, 0.0)) {
     soundRepository.onNewMaxDbLevel = onNewMaxDbLevel;
-    soundRepository.onNewMeanDbLevel = onNewMaxDbLevel;
+    soundRepository.onNewMeanDbLevel = onNewMeanDbLevel;
   }
 
   SoundRecorderState get initialState => const SoundRecorderInitiated(0.0, 0.0);

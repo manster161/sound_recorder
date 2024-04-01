@@ -52,9 +52,10 @@ class SoundRepository {
     }
 
     isRecording = false;
-    _noiseSubscription?.cancel();
+    _noiseSubscription?.cancel(); 
     _noiseSubscription = null;
     noiseMeter = null;
+    _latestReading = null;
   }
 
   void reset() {
@@ -69,12 +70,14 @@ class SoundRepository {
 
 
   void onData(NoiseReading event) {
-    logger.i('Recorder Data: ${event.meanDecibel}');
+    logger.i('Mean: ${event.meanDecibel}Last Mean ${_latestReading?.meanDecibel} Max: ${event.maxDecibel}');
     if (_latestReading == null) {
+      logger.i('First reading received');
       onNewMeanDbLevel(event.meanDecibel);
       onNewMaxDbLevel(event.maxDecibel);
     } else {
       if (event.meanDecibel != _latestReading!.meanDecibel) {
+        logger.i('Mean level changed');
         onNewMeanDbLevel(event.meanDecibel);
       }
       if (event.maxDecibel > maxDbLevel) {
