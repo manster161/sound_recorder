@@ -28,6 +28,8 @@ class SoundRepository {
   Future startRecording() async {
     logger.i('Recorder Start');
 
+    maxDbLevel = 0.0;
+
     if (isRecording) {
       logger.i('Already started');
       return;

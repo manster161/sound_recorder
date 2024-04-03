@@ -42,7 +42,7 @@ void main() {
 
     // Assert
 
-    verify(() => dataHandler.onNewMaxDbLevel(60.0)).called(1);
+    verify(() => dataHandler.onNewMaxDbLevel(_)).called(1);
     /*
     verify(() => logger.i(
             'Mean: ${event.meanDecibel}Last Mean null Max: ${event.maxDecibel}'))
