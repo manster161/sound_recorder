@@ -18,12 +18,22 @@ class SoundRecorderPage extends StatelessWidget {
           title: const Text('Settings'),
           content: const Text('This is the settings dialog.'),
           actions: <Widget>[
-            TextButton(
+            Column(
+              children: [
+                const TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter dB threshold',
+                  ),
+                ),
+                TextButton(
               child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ),
+            )],
+            )
+            ,
           ],
         );
       },
