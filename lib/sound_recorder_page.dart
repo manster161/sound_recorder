@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sound_recorder/settings_bloc.dart';
+import 'package:sound_recorder/settings_state.dart';
+import 'package:sound_recorder/settings_event.dart';
 import 'package:sound_recorder/sound_recorder_bloc.dart';
 import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
@@ -20,11 +23,19 @@ class SoundRecorderPage extends StatelessWidget {
           actions: <Widget>[
             Column(
               children: [
-                const TextField(
-                  decoration: InputDecoration(
+                BlocBuilder<SettingsBloc, SettingsState>(
+                  builder: (context, state) => 
+                    Text('Threshold level: ${state.thresholdLevel.toString()}')
+                ),
+                 TextField(
+                  decoration: const InputDecoration (
                     border: OutlineInputBorder(),
                     labelText: 'Enter dB threshold',
-                  ),
+                    ),
+                    onChanged: (value) {
+                      BlocProvider.of<SettingsBloc>(context)
+                        .add(ThresholdChangeEvent(double.parse(value)));
+                    },
                 ),
                 TextButton(
               child: const Text('Close'),
