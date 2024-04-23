@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_recorder/settings_bloc.dart';
@@ -9,49 +8,16 @@ import 'package:sound_recorder/sound_recorder_state.dart';
 import 'package:sound_recorder/sound_recorder_event.dart';
 import 'package:logger/logger.dart';
 
-class SoundRecorderPage extends StatelessWidget {
+class SoundRecorderPage extends StatefulWidget {
   SoundRecorderPage({super.key});
 
-  final Logger _logger = Logger(level: Level.info);
+  @override
+  _SoundRecorderPageState createState() => _SoundRecorderPageState();
+}
 
-  void onPressed(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Settings'),
-          content: const Text('This is the settings dialog.'),
-          actions: <Widget>[
-            Column(
-              children: [
-                BlocBuilder<SettingsBloc, SettingsState>(
-                  builder: (context, state) => 
-                    Text('Threshold level: ${state.thresholdLevel.toString()}')
-                ),
-                 TextField(
-                  decoration: const InputDecoration (
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter dB threshold',
-                    ),
-                    onChanged: (value) {
-                      BlocProvider.of<SettingsBloc>(context)
-                        .add(ThresholdChangeEvent(double.parse(value)));
-                    },
-                ),
-                TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )],
-            )
-            ,
-          ],
-        );
-      },
-    );
-  }
-  
+class _SoundRecorderPageState extends State<SoundRecorderPage> {
+  double _sliderValue = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,9 +31,8 @@ class SoundRecorderPage extends StatelessWidget {
               children: [
                 Center(
                   child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
-                    builder: (context, state) => 
-                      Text('Mean db level: ${state.currentDbLevel.toString()}')
-                  ),
+                      builder: (context, state) => Text(
+                          'Mean db level: ${state.currentDbLevel.toString()}')),
                 ),
               ],
             ),
@@ -75,21 +40,29 @@ class SoundRecorderPage extends StatelessWidget {
               children: [
                 Center(
                   child: BlocBuilder<SoundRecorderBloc, SoundRecorderState>(
-                    builder: (context, state) => 
-                      Text('Peak db level: ${state.peakDbLevel.toString()}')
-                  ),
+                      builder: (context, state) => Text(
+                          'Peak db level: ${state.peakDbLevel.toString()}')),
                 ),
               ],
             ),
-            Slider(
-              value: 120, // Replace with the actual value
-              min: 20.0, // Replace with the actual minimum value
-              max: 180.0, // Replace with the actual maximum value
-              onChanged: (value) {
-                BlocProvider.of<SoundRecorderBloc>(context).sliderChanged(value);
-              },
-            ),
-          
+            Row(
+              children: [
+                Center(
+                  child: BlocBuilder<SettingsBloc, SettingsState>(
+                    builder: (context, state) => 
+                    Slider(
+                        value: state.thresholdLevel,
+                        min: 0.0,
+                        max: 120.0,
+                        divisions: 120,
+                        onChanged: (value) {
+                         // BlocProvider.of<SettingsBloc>(context)
+                        //      .add(ThresholdChangeEvent(value));
+                        }),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
@@ -102,13 +75,9 @@ class SoundRecorderPage extends StatelessWidget {
               builder: (context, state) => Text(state.recordButtonText),
             ),
             onPressed: () => BlocProvider.of<SoundRecorderBloc>(context)
-              .add(const SoundRecorderToggleEvent(0.0, 0.0)),
+                .add(const SoundRecorderToggleEvent(0.0, 0.0)),
           ),
           const SizedBox(height: 4),
-          FloatingActionButton(
-            child: const Text('Settings'),
-            onPressed: () => onPressed(context),
-          ),
         ],
       ),
     );

@@ -12,6 +12,10 @@ double threshold = 120.0;
     add(SettingsInitEvent(threshold));
   }
 
+  void changeThreshold(double threshold) {
+    add(ThresholdChangeEvent(threshold));
+  }   
+
 
   @override
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
