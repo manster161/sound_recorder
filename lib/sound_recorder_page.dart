@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sound_recorder/settings_bloc.dart';
@@ -80,6 +81,15 @@ class SoundRecorderPage extends StatelessWidget {
                 ),
               ],
             ),
+            Slider(
+              value: 120, // Replace with the actual value
+              min: 20.0, // Replace with the actual minimum value
+              max: 180.0, // Replace with the actual maximum value
+              onChanged: (value) {
+                BlocProvider.of<SoundRecorderBloc>(context).sliderChanged(value);
+              },
+            ),
+          
           ],
         ),
       ),

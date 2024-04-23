@@ -44,6 +44,10 @@ class SoundRecorderBloc extends Bloc<SoundRecorderEvent, SoundRecorderState> {
     return soundRepository.isRecording;
   }
 
+void sliderChanged(double value) {
+    logger.i('Slider changed to $value');
+  }
+
   @override
   Stream<SoundRecorderState> mapEventToState(
     SoundRecorderEvent event,
